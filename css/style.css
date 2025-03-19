@@ -122,3 +122,10 @@ button:hover {
   margin-bottom: 15px;
   color: #ff0000;
 }
+
+.path-segment {
+  position: absolute;
+  background-color: #8b4513;
+  z-index: 2;
+  transition: top 0.05s linear, height 0.05s linear;
+}

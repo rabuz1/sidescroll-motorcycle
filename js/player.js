@@ -31,32 +31,34 @@ const Player = (function () {
   function update(gameSpeed) {
     // Determine if we're using reduced speed (when off path)
     const isSlowedDown = gameSpeed < 10;
-    const accelerationMultiplier = isSlowedDown ? 0.25 : 1;
-    const decelerationMultiplier = isSlowedDown ? 4.0 : 1.0;
+
+    // Adjust acceleration and max speed based on path status
+    const accelerationMultiplier = isSlowedDown ? 0.3 : 1.0;
+    const maxSpeedMultiplier = isSlowedDown ? 0.2 : 1.0;
+    const effectiveMaxSpeed = playerMaxSpeed * maxSpeedMultiplier;
 
     // Vertical movement
     if (InputHandler.keys.ArrowUp) {
       playerSpeedY = Math.max(
         playerSpeedY - playerAcceleration * accelerationMultiplier,
-        -playerMaxSpeed * accelerationMultiplier
+        -effectiveMaxSpeed
       );
     } else if (InputHandler.keys.ArrowDown) {
       playerSpeedY = Math.min(
         playerSpeedY + playerAcceleration * accelerationMultiplier,
-        playerMaxSpeed * accelerationMultiplier
+        effectiveMaxSpeed
       );
     } else {
-      // Decelerate when no keys are pressed
+      // Decelerate when no keys are pressed - use a fixed deceleration rate
+      // that's stronger when off-path
+      const currentDeceleration = isSlowedDown
+        ? playerDeceleration * 2
+        : playerDeceleration;
+
       if (playerSpeedY > 0) {
-        playerSpeedY = Math.max(
-          0,
-          playerSpeedY - playerDeceleration * decelerationMultiplier
-        );
+        playerSpeedY = Math.max(0, playerSpeedY - currentDeceleration);
       } else if (playerSpeedY < 0) {
-        playerSpeedY = Math.min(
-          0,
-          playerSpeedY + playerDeceleration * decelerationMultiplier
-        );
+        playerSpeedY = Math.min(0, playerSpeedY + currentDeceleration);
       }
     }
 
@@ -64,35 +66,36 @@ const Player = (function () {
     if (InputHandler.keys.ArrowRight) {
       playerSpeedX = Math.min(
         playerSpeedX + playerAcceleration * accelerationMultiplier,
-        playerMaxSpeed * accelerationMultiplier
+        effectiveMaxSpeed
       );
     } else if (InputHandler.keys.ArrowLeft) {
       playerSpeedX = Math.max(
         playerSpeedX - playerAcceleration * accelerationMultiplier,
-        -playerMaxSpeed * accelerationMultiplier
+        -effectiveMaxSpeed
       );
     } else {
-      // Decelerate when no keys are pressed
+      // Decelerate when no keys are pressed - use a fixed deceleration rate
+      // that's stronger when off-path
+      const currentDeceleration = isSlowedDown
+        ? playerDeceleration * 2
+        : playerDeceleration;
+
       if (playerSpeedX > 0) {
-        playerSpeedX = Math.max(
-          0,
-          playerSpeedX - playerDeceleration * decelerationMultiplier
-        );
+        playerSpeedX = Math.max(0, playerSpeedX - currentDeceleration);
       } else if (playerSpeedX < 0) {
-        playerSpeedX = Math.min(
-          0,
-          playerSpeedX + playerDeceleration * decelerationMultiplier
-        );
+        playerSpeedX = Math.min(0, playerSpeedX + currentDeceleration);
       }
     }
 
     // Apply constant leftward drift if not accelerating enough
     if (playerSpeedX < gameSpeed) {
-      // Increase the drift multiplier when off path
-      const driftMultiplier = isSlowedDown ? 1.5 : 0.5;
+      // Much stronger drift when off path
+      const driftMultiplier = isSlowedDown ? 3.0 : 0.5;
       playerX -= (gameSpeed - playerSpeedX) * driftMultiplier;
     } else {
-      playerX += playerSpeedX - gameSpeed;
+      // Reduced forward movement when off path
+      const forwardMultiplier = isSlowedDown ? 0.4 : 1.0;
+      playerX += (playerSpeedX - gameSpeed) * forwardMultiplier;
     }
 
     // Update vertical position

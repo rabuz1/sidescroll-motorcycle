@@ -59,8 +59,12 @@ const Game = (function () {
     } else if (collisionResult === "slowdown") {
       // Player is off the path - apply slowdown
       isOffPath = true;
+      // Visual feedback - change player color when off path
+      document.getElementById("player").style.backgroundColor = "#ff6666";
     } else {
       isOffPath = false;
+      // Visual feedback - normal color when on path
+      document.getElementById("player").style.backgroundColor = "#ff0000";
     }
 
     // Update game elements with appropriate speed
