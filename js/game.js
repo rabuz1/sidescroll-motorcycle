@@ -3,7 +3,7 @@ const Game = (function () {
   // Game variables
   let obstacles = [];
   let score = 0;
-  let gameSpeed = 5;
+  let gameSpeed = 10;
   let isGameRunning = false;
   let gameArea;
   let isOffPath = false;
@@ -30,7 +30,7 @@ const Game = (function () {
     obstacles.forEach((obstacle) => obstacle.remove());
     obstacles = [];
     score = 0;
-    gameSpeed = 5;
+    gameSpeed = 10;
     isOffPath = false;
 
     // Reset modules
@@ -74,7 +74,7 @@ const Game = (function () {
 
     // Increase game speed gradually as score increases
     if (Math.floor(score) % 10 === 0 && Math.floor(score) > 0) {
-      gameSpeed = Math.min(gameSpeed + 0.001, 12); // Cap at maximum speed of 12
+      gameSpeed = Math.min(gameSpeed + 0.002, 24);
     }
 
     // Continue the game loop

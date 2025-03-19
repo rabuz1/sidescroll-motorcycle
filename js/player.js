@@ -8,9 +8,9 @@ const Player = (function () {
   let playerX = 100; // Initial horizontal position
   let playerSpeedY = 0;
   let playerSpeedX = 0;
-  const playerAcceleration = 0.5;
-  const playerDeceleration = 0.2;
-  const playerMaxSpeed = 8;
+  const playerAcceleration = 1.0;
+  const playerDeceleration = 0.4;
+  const playerMaxSpeed = 16;
 
   // Initialize player
   function init() {
@@ -30,8 +30,9 @@ const Player = (function () {
   // Update player position based on input
   function update(gameSpeed) {
     // Determine if we're using reduced speed (when off path)
-    const isSlowedDown = gameSpeed < 5;
+    const isSlowedDown = gameSpeed < 10;
     const accelerationMultiplier = isSlowedDown ? 0.5 : 1;
+    const decelerationMultiplier = isSlowedDown ? 4.0 : 1.0; // Increased from 2.0 to 4.0 for more dramatic effect
 
     // Vertical movement
     if (InputHandler.keys.ArrowUp) {
@@ -47,9 +48,15 @@ const Player = (function () {
     } else {
       // Decelerate when no keys are pressed
       if (playerSpeedY > 0) {
-        playerSpeedY = Math.max(0, playerSpeedY - playerDeceleration);
+        playerSpeedY = Math.max(
+          0,
+          playerSpeedY - playerDeceleration * decelerationMultiplier
+        );
       } else if (playerSpeedY < 0) {
-        playerSpeedY = Math.min(0, playerSpeedY + playerDeceleration);
+        playerSpeedY = Math.min(
+          0,
+          playerSpeedY + playerDeceleration * decelerationMultiplier
+        );
       }
     }
 
@@ -67,15 +74,23 @@ const Player = (function () {
     } else {
       // Decelerate when no keys are pressed
       if (playerSpeedX > 0) {
-        playerSpeedX = Math.max(0, playerSpeedX - playerDeceleration);
+        playerSpeedX = Math.max(
+          0,
+          playerSpeedX - playerDeceleration * decelerationMultiplier
+        );
       } else if (playerSpeedX < 0) {
-        playerSpeedX = Math.min(0, playerSpeedX + playerDeceleration);
+        playerSpeedX = Math.min(
+          0,
+          playerSpeedX + playerDeceleration * decelerationMultiplier
+        );
       }
     }
 
     // Apply constant leftward drift if not accelerating enough
     if (playerSpeedX < gameSpeed) {
-      playerX -= (gameSpeed - playerSpeedX) * 0.5;
+      // Increase the drift multiplier when off path
+      const driftMultiplier = isSlowedDown ? 2.0 : 0.5; // Increased from 1.0 to 2.0 for more dramatic effect
+      playerX -= (gameSpeed - playerSpeedX) * driftMultiplier;
     } else {
       playerX += playerSpeedX - gameSpeed;
     }
