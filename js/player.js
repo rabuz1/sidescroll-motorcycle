@@ -31,8 +31,8 @@ const Player = (function () {
   function update(gameSpeed) {
     // Determine if we're using reduced speed (when off path)
     const isSlowedDown = gameSpeed < 10;
-    const accelerationMultiplier = isSlowedDown ? 0.5 : 1;
-    const decelerationMultiplier = isSlowedDown ? 4.0 : 1.0; // Increased from 2.0 to 4.0 for more dramatic effect
+    const accelerationMultiplier = isSlowedDown ? 0.25 : 1;
+    const decelerationMultiplier = isSlowedDown ? 4.0 : 1.0;
 
     // Vertical movement
     if (InputHandler.keys.ArrowUp) {
@@ -89,7 +89,7 @@ const Player = (function () {
     // Apply constant leftward drift if not accelerating enough
     if (playerSpeedX < gameSpeed) {
       // Increase the drift multiplier when off path
-      const driftMultiplier = isSlowedDown ? 2.0 : 0.5; // Increased from 1.0 to 2.0 for more dramatic effect
+      const driftMultiplier = isSlowedDown ? 1.5 : 0.5;
       playerX -= (gameSpeed - playerSpeedX) * driftMultiplier;
     } else {
       playerX += playerSpeedX - gameSpeed;
