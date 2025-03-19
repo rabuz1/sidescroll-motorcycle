@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Black Emperor Motorcycle Game</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div class="game-container">
+      <div class="game-area">
+        <div id="background" class="background"></div>
+        <div id="dirt-path" class="dirt-path"></div>
+        <div id="player" class="motorcycle"></div>
+        <div class="score">Score: <span id="score-value">0</span></div>
+        <div id="game-over" class="game-over">
+          <h2>Game Over</h2>
+          <p>Your score: <span id="final-score">0</span></p>
+          <button id="restart-btn">Restart</button>
+        </div>
+      </div>
+      <div class="controls">
+        <button id="start-btn">Start Game</button>
+        <div class="instructions">
+          <p>Use UP/DOWN arrows to move vertically</p>
+          <p>Use LEFT/RIGHT arrows to control speed</p>
+          <p>Stay on the dirt path to survive!</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Load modules in the correct order -->
+    <script src="js/input.js"></script>
+    <script src="js/player.js"></script>
+    <script src="js/path.js"></script>
+    <script src="js/collision.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/game.js"></script>
+  </body>
+</html>
