@@ -3,9 +3,13 @@ const Player = (function () {
   // Player element
   let playerElement;
 
+  // Player position constants (single source of truth)
+  const INITIAL_PLAYER_X = 100;
+  const INITIAL_PLAYER_Y = 240;
+
   // Player movement variables
-  let playerY = 290; // Initial vertical position
-  let playerX = 100; // Initial horizontal position
+  let playerY = INITIAL_PLAYER_Y; // Use the constant
+  let playerX = INITIAL_PLAYER_X; // Use the constant
   let playerSpeedY = 0;
   let playerSpeedX = 0;
   const playerAcceleration = 1.0;
@@ -16,12 +20,22 @@ const Player = (function () {
   function init() {
     playerElement = document.getElementById("player");
     resetPosition();
+
+    // Set initial CSS position to match JavaScript position
+    document.documentElement.style.setProperty(
+      "--player-initial-x",
+      INITIAL_PLAYER_X + "px"
+    );
+    document.documentElement.style.setProperty(
+      "--player-initial-y",
+      INITIAL_PLAYER_Y + "px"
+    );
   }
 
   // Reset player position
   function resetPosition() {
-    playerY = 290;
-    playerX = 100;
+    playerY = INITIAL_PLAYER_Y;
+    playerX = INITIAL_PLAYER_X;
     playerSpeedY = 0;
     playerSpeedX = 0;
     updateVisualPosition();
